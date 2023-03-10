@@ -13,7 +13,7 @@ import Button from '../button';
 
 
 
-// API KEY: 55c7bf54637844c3556adeff289f1b44
+// API KEY: c136ee287fd54b2489b78c2b03ce8899
 export default class Iphone extends Component {
 	
 //var Iphone = React.createClass({
@@ -25,6 +25,7 @@ export default class Iphone extends Component {
 		// temperature state
 		this.pages = ["home", "forecast", "warning"];
 		this.state.temp = "";
+		this.state.currentWarning = true; //change to false in reality
 		this.state.page = this.pages[0];
 	}
 
@@ -32,7 +33,7 @@ export default class Iphone extends Component {
 	// fetch weather data from openweathermap.org
 	fetchWeatherData = () => {
 		// API call to openweathermap.org
-		const url = "https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&units=metric&appid=55c7bf54637844c3556adeff289f1b44";
+		const url = "https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&units=metric&appid=c136ee287fd54b2489b78c2b03ce8899";
 		// retrieve the data from the API call and parse it to JSON
 		$.ajax({
 			url: url,
@@ -48,7 +49,12 @@ export default class Iphone extends Component {
 		let i = this.pages.indexOf(this.state.page); //checks current index of the page array
 		//as long as the index is not on the last page, it can be changed.
 		if (i !== this.pages.length-1) {
-			this.setState({ page: this.pages[i+1] }); 
+			
+			if((this.state.currentWarning === true && (i === 0 || i == 1)) || (this.state.currentWarning === false && i === 0)){ //if there is no warning, there would be no warning page
+				this.setState({ page: this.pages[i+1] }); 
+			} else {
+				this.setState({ page: this.pages[i] }); 
+			}
 		}
 	}
 
@@ -61,6 +67,11 @@ export default class Iphone extends Component {
 		} 
 	}
 
+	//function to change the page to a specific page
+	changePage = (pageNumber) => {
+		return this.setState({ page: this.pages[pageNumber] });
+	}
+
 	// the main render method for the iphone component
 	render() {
 		//fetch weatherdata
@@ -70,11 +81,10 @@ export default class Iphone extends Component {
 		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
 		return (
 			<div class={ style.container }>
-				
 				<div class={ style.header }>
-					<div class= { style.today }> Today </div>
+				   {  this.state.page === "home" && <div class= { style.today }> Today </div>}
 				   { this.state.page === "home" && <img class={ style.header } src="../assets/backgrounds/mountain.png" alt="mountain" /> }
-
+				   { this.state.page === "warning" && <img class={ style.hazard } src="../assets/icons/warning-forecast.png" alt="hazard" /> }
 				</div>
 
 				<div class={ style.details }></div>
@@ -88,20 +98,20 @@ export default class Iphone extends Component {
 				</div> }
 
 				{ this.state.page === "warning" && <div class={ style.warning }>
-					<div> Warning </div>
+					<div> Ensure to dress up correctly for: </div>
 				</div> }
 				
 				<div class={ style.footer }>
 					<div className={ style_leftarrow.container }>
-						<Button  className={ style_leftarrow.button } id="left" clickFunction={ this.changePageBackward }/>
+						<Button  className={ style_leftarrow.button } clickFunction={ this.changePageBackward }/>
 					</div>
 					<div className={ style_button.container }>
-						<Button  className={ style_button.button }/> 
-						<Button  className={ style_button.button }/> 
-						<Button  className={ style_button.button }/> 
+						<Button  className={ style_button.button } clickFunction={() => this.changePage(0)}/> 
+						<Button  className={ style_button.button } clickFunction={() => this.changePage(1)}/> 
+						{ this.state.currentWarning === true && <Button  className={ style_button.button } clickFunction={() => this.changePage(2)}/> }
 					</div>
 					<div className={ style_rightarrow.container }>
-						<Button  className={ style_rightarrow.button } id="right" clickFunction={ this.changePageForward }/>
+						<Button  className={ style_rightarrow.button } clickFunction={ this.changePageForward }/>
 					</div>
 				</div>
 			</div>
@@ -114,5 +124,13 @@ export default class Iphone extends Component {
 		//CURRENT WEATHER CONDITION: var conditions = parsed_json['weather']['0']['description'];
 		// set states for fields so they could be rendered later on
 		this.setState({ temp: temp_c });      
+		//check if weather condition is a dangerous warning -> throw hazard 
+		// if (parsed_json['weather']['0']['description'] in []){
+		// 	this.setState({ currentWarning: true }); 
+		// }
+
+		//temporary
+		this.setState({ currentWarning: true });      
+
 	}
 }
