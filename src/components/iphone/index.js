@@ -25,6 +25,7 @@ export default class Iphone extends Component {
 		// temperature state
 		this.pages = ["home", "forecast", "warning"];
 		this.state.temp = "";
+		this.state.description = "";
 		this.state.currentWarning = true; //change to false in reality
 		this.state.page = this.pages[0];
 	}
@@ -75,7 +76,7 @@ export default class Iphone extends Component {
 	// the main render method for the iphone component
 	render() {
 		//fetch weatherdata
-		//this.fetchWeatherData();
+		//setInterval(this.fetchWeatherData, 120000);
 
 		// check if temperature data is fetched, if so add the sign styling to the page
 		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
@@ -85,6 +86,8 @@ export default class Iphone extends Component {
 				   {  this.state.page === "home" && <div class= { style.today }> Today </div>}
 				   { this.state.page === "home" && <img class={ style.header } src="../assets/backgrounds/mountain.png" alt="mountain" /> }
 				   { this.state.page === "warning" && <img class={ style.hazard } src="../assets/icons/warning-forecast.png" alt="hazard" /> }
+				   { this.state.page === "warning" && <img class={style.clouds } src="../assets/icons/clouds.png" alt="cloud" /> }
+
 				</div>
 
 				<div class={ style.details }></div>
@@ -94,11 +97,21 @@ export default class Iphone extends Component {
 				</div> }
 				
 				{ this.state.page === "forecast" && <div class={ style.forecast }>
-					<div> Forecast </div>
+					<div> Forecast X </div>
+					<p class ="smallTemp"> Today: {this.state.temp} </p>
+					
 				</div> }
 
 				{ this.state.page === "warning" && <div class={ style.warning }>
 					<div> Ensure to dress up correctly for: </div>
+					{ this.state.description === "heavy intensity rain" && <div className= { style.warningTitle }> HEAVY INTENSITY RAIN </div> }
+					{ this.state.description === "heavy intensity rain" && <div className= { style.warningDescription }> POTENTIAL FLOODING AND LOW VISIBILITY </div> }
+
+					{ this.state.description === "moderate rain" && <div className= { style.warningTitle }> MODERATE RAIN </div> }
+					{ this.state.description === "moderate rain" && <div className= { style.warningDescription }> POTENTIAL FLOODING AND LOW VISIBILITY </div> }
+
+					{ this.state.description === "heavy snow" && <div className= { style.warningTitle }> HEAVY SNOW </div> }
+					{ this.state.description === "heavy snow" && <div className= { style.warningDescription }> POTENTIAL LOW VISIBILITY </div> }
 				</div> }
 				
 				<div class={ style.footer }>
@@ -113,17 +126,36 @@ export default class Iphone extends Component {
 					<div className={ style_rightarrow.container }>
 						<Button  className={ style_rightarrow.button } clickFunction={ this.changePageForward }/>
 					</div>
+
 				</div>
 			</div>
 		);
 	}
 
+	componentDidMount() {
+		this.fetchWeatherData();
+		setInterval(this.fetchWeatherData, 240000)
+	}
+
 	parseResponse = (parsed_json) => {
 		//LOCATION: var location = parsed_json['name'];
 		let temp_c = parsed_json['main']['temp'];
-		//CURRENT WEATHER CONDITION: var conditions = parsed_json['weather']['0']['description'];
+		let avgWeather = parsed_json['weather'][0]['main']; //E.g. "Cloudy"
+		let currentCondition = parsed_json['weather']['0']['description']; //More detailed version of above
+		let windSpeed = parsed_json['wind']['speed'];
+		let humidity = parsed_json['main']['humidity']
+
+		//console.log(temp_c) //Don't think it needs to be logged
+		
 		// set states for fields so they could be rendered later on
-		this.setState({ temp: temp_c });      
+		this.setState({ description: currentCondition });      
+
+		this.setState({
+			temp: temp_c
+			
+		});     //Rest add later
+
+
 		//check if weather condition is a dangerous warning -> throw hazard 
 		// if (parsed_json['weather']['0']['description'] in []){
 		// 	this.setState({ currentWarning: true }); 
