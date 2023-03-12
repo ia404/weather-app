@@ -16,7 +16,6 @@
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-
 }
 
 .details {
@@ -28,7 +27,7 @@
 	width: 414px;
 	height: 736px;
 	text-align: center;
-	padding-top: 80px;
+	padding-top: 5px;
 	margin: 0 auto;
 }
 
@@ -49,19 +48,22 @@
 
 .temperature {
 	flex: 2;
+	color: black;
 	margin-top: 207px;
-	font-size: 4.8em;
-	font-weight: 300;
+	font-size: 8.5em;
+	font-weight: 400;
 	letter-spacing: -5px;
 }
+
 .filled:after {
 	content: "°";
-	margin: 0 0 0 1rem;
-	font-size: 0.5em;
-	font-weight: 100;
-	display: inline-block;
-	padding-top: 10px;
 	vertical-align: top;
+	position: absolute;
+	margin: 0 0 0 1rem;
+	font-size: 0.7em;
+	font-weight: 400;
+	padding-top: 5px;
+	margin-left: 5px;
 }
 
 .footer {
@@ -81,7 +83,7 @@
 }
 
 .warning {
-	color: #9d1717;
+	color: black;
 	width: 414px;
 	height: 736px;
 	text-align: center;
@@ -90,20 +92,45 @@
 	margin-top: -80px;
 }
 
+//style rules for the warning page
 .warningTitle {
+	color: #9d1717;
 	text-align: center;
 	margin-top: 20px;
-	font-size: 1.5em;
+	font-size: 1.8em;
 	font-weight: 600;
 }
 
 .warningDescription {
+	color: #9d1717;
 	text-align: center;
 	margin-top: 40px;
-	font-size: 1em;
-	font-weight: 850;
+	font-size: 2em;
+	font-weight: 600;
 }
 
 .clouds {
 	margin-top: -200px;
+}
+
+
+//style rules for the wind speed, humidity, and precipitation icons/descriptions
+.detailsContainer {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.detailsIcon {
+	width: 30px;
+	height: 30px;
+	margin-top: 70px;
+	margin-right: 20px;
+	margin-left: 40px;
+}
+
+.detailsText {
+	color: black;
+	margin-right: 20px;
+	margin-left: 40px;
 }
