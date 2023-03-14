@@ -21,9 +21,30 @@ export default class Iphone extends Component {
 	// a constructor with initial set states
 	constructor(props){
 		super(props);
-		// temperature state
+		// temperature state		
+
+		//Temp of 7days stored here
+		this.state.currenttemp = null;
+		this.state.temp = null;
+		this.state.temp2 = null;
+		this.state.temp3 = null;
+		this.state.temp4 = null;
+		this.state.temp5 = null;
+		this.state.temp6 = null;
+		this.state.temp7 = null;
+		
+		//Storing states of 5 days
+		this.state.current = null;
+		this.state.today = null;
+		this.state.second = null;
+		this.state.third = null;
+		this.state.fourth = null;
+		this.state.fifth = null;
+		this.state.sixth = null;
+
+		//description of weather
 		this.pages = ["home", "forecast", "warning"];
-		this.state.temp = 2;
+		this.state.temp = 0.1;
 		this.state.windSpeed = 20;
 		this.state.humidity = 1;
 		this.state.precipitation = 10;
@@ -36,7 +57,7 @@ export default class Iphone extends Component {
 	// fetch weather data from openweathermap.org
 	fetchWeatherData = () => {
 		// API call to openweathermap.org
-		const url = "https://api.openweathermap.org/data/2.5/forecast?lat=54.46087&lon=-3.088625&cnt=7&appid=76e5bd7bbfc1b3d0f82d533b3b231151";
+		const url = "https://api.openweathermap.org/data/2.5/forecast?lat=54.46087&lon=-3.088625&cnt=66&units=metric&appid=76e5bd7bbfc1b3d0f82d533b3b231151";
 		// retrieve the data from the API call and parse it to JSON
 		$.ajax({
 			url: url,
@@ -77,6 +98,12 @@ export default class Iphone extends Component {
 		return this.setState({ page: this.pages[pageNumber] });
 	}
 
+	//function to parse the convert a given date to a day of the week
+	changeDateToDay = (date) => {
+		const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+		//creates date object from the given date and converts it to a day of the week
+		return days[new Date(date).getDay()];
+	}
 
 	componentDidMount() {
 		//this.fetchWeatherData();
@@ -89,7 +116,7 @@ export default class Iphone extends Component {
 		//setInterval(this.fetchWeatherData, 120000);
 
 		// check if temperature data is fetched, if so add the sign styling to the page
-		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
+		const tempStyles = this.state.currenttemp ? `${style.temperature} ${style.filled}` : style.temperature;
 		return (
 			<div class={ style.container }>
 				<div class={ style.header }>
@@ -102,7 +129,7 @@ export default class Iphone extends Component {
 
 				<div class={ style.details }></div>
 				{/*check if the user is on the homepage so it can output the wind speed, humidity and precipitation */  this.state.page === "home" && <div class={ style.home }>
-					<span class={ tempStyles }> { this.state.temp } </span>
+					<span class={ tempStyles }> { this.state.currenttemp } </span>
 
 					<div className={style.detailsContainer}>
 						
@@ -128,8 +155,13 @@ export default class Iphone extends Component {
 				
 				{/* check if the user is on the forecast page */  this.state.page === "forecast" && <div class={ style.forecast }>
 					<div> Forecast X </div>
-					<p class ="smallTemp"> Today: {this.state.temp} </p>
-					
+					<p class ="smallTemp"> {this.state.current}: {this.state.currenttemp} </p>
+					<p class ="smallTemp"> {this.state.today}: {this.state.temp} </p>
+					<p class ="smallTemp"> {this.state.second}: {this.state.temp2} </p>
+					<p class ="smallTemp"> {this.state.third}: {this.state.temp3} </p>
+					<p class ="smallTemp"> {this.state.fourth}: {this.state.temp4} </p>
+					<p class ="smallTemp"> {this.state.fifth}: {this.state.temp5} </p>
+					<p class ="smallTemp"> {this.state.sixth}: Not Applicable at this current time. </p>
 				</div> }
 
 				{/*If the user is on the warning page, they are able to see the exact warning */  this.state.page === "warning" && <div class={ style.warning }>
@@ -144,13 +176,17 @@ export default class Iphone extends Component {
 					{/* Give a warning if there is hevay snow */ this.state.description === "heavy snow" && <div className= { style.warningTitle }> HEAVY SNOW </div> }
 					{ this.state.description === "heavy snow" && <div className= { style.warningDescription }> POTENTIAL SLIPPING </div> }
 
-					{this.state.temp > 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false  && <div className= { style.warningTitle }> NO WARNING AT THIS CURRENT TIME </div> }
+					{this.state.currenttemp > 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false  && <div className= { style.warningTitle }> NO WARNING AT THIS CURRENT TIME </div> }
 				
-					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking */  this.state.temp <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
-					{this.state.temp <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
+					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking */  this.state.currenttemp <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
+					{this.state.currenttemp <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
 
 				</div> }
-				
+
+				{/* check if the user is on the forecast page   this.state.page === "settings" && <div class={ style.forecast }>
+				<div> Settings  </div>
+					<p class ="smallTemp"> CHANGE FROM X TO Y: {this.state.currenttemp} </p>
+				</div> */ }
 
 				<div class={ style.footer }>
 					<div className={ style_leftarrow.container }>
@@ -175,35 +211,57 @@ export default class Iphone extends Component {
 		);
 	}
 
-
 	parseResponse = (parsed_json) => {
-		//LOCATION: var location = parsed_json['name'];
-		let temp_c = parsed_json['main']['temp'];
-		let avgWeather = parsed_json['weather'][0]['main']; //E.g. "Cloudy"
-		let currentCondition = parsed_json['weather']['0']['description']; //More detailed version of above
-		let windSpeed = parsed_json['wind']['speed'];
-		let humidity = parsed_json['main']['humidity']
+	//LOCATION: var location = parsed_json['name'];
+		//let temp_c = parsed_json['main']['temp'];
+		// let variable = parsed_json.list.map(variableName.main.StatFromJSON);
+		const temp_c = parsed_json.list.map(temps => temps.main.temp); //Map Stores an array of temps
+		//let temp_c = temps[0]
 
-		//console.log(temp_c) //Don't think it needs to be logged
+		//Get date-time info from JSON
+		//filter so every 00:00:00 is displayed
+		const dates = parsed_json.list.map(day => day.dt_txt )
+		const filteredDates = dates.filter(date => date.includes("00:00:00"))
 		
-		// set states for fields so they could be rendered later on
+		//let avgWeather = parsed_json['weather'][0]['main']; //E.g. "Cloudy"
+		////let currentCondition = parsed_json['weather']['0']['description']; //More detailed version of above
+		//let windSpeed = parsed_json['wind']['speed'];
+		//let humidity = parsed_json['main']['humidity']
+
+		//Setting states for temp
+		this.setState({
+			currenttemp: temp_c[0],
+			temp: temp_c[1],
+			temp2: temp_c[2],
+			temp3: temp_c[3],
+			temp4: temp_c[4],
+			temp5: temp_c[5],
+			temp6: temp_c[6],
+			temp7: temp_c[7]
+		});     
 		
-		this.setState({ description: currentCondition });      
+		let last = new Date(filteredDates[4]);
+		let lastDate = last.setDate(last.getDate() + 1);
 
 		this.setState({
-			temp: temp_c
-		});     //Rest add later
+			current: this.changeDateToDay(dates[0]),
+			today: this.changeDateToDay(filteredDates[0]),
+			second: this.changeDateToDay(filteredDates[1]),
+			third: this.changeDateToDay(filteredDates[2]),
+			fourth: this.changeDateToDay(filteredDates[3]),
+			fifth: this.changeDateToDay(filteredDates[4]),
+			sixth: this.changeDateToDay(lastDate)
+		});
 
+		// set states for fields so they could be rendered later on
+		////this.setState({ description: currentCondition });      
 
 		//check if weather condition is a dangerous warning -> throw hazard 
-		// if (["heavy intensity rain", "moderate rain", "heavy snow"].includes(parsed_json['weather']['0']['description'])){
+		// if (parsed_json['weather']['0']['description'] in []){
 		// 	this.setState({ currentWarning: true }); 
-		// } else {
-		// 	this.setState({ currentWarning: false });
 		// }
 
 		//temporary
 		this.setState({ currentWarning: true });      
-
 	}
 }
