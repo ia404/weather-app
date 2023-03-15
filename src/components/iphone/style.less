@@ -18,12 +18,6 @@
 	flex: 1;
 }
 
-.mountain {
-	margin-top: -80px;	
-	//stretch the mountain image to fit the screen
-
-}
-
 .details {
 	flex: 4;
 }
@@ -36,6 +30,7 @@
 	padding-top: 5px;
 	margin: 0 auto;
 }
+
 
 .forecastContainer {
 	display: flex;
@@ -52,7 +47,21 @@
 	margin-top: -10px;
 	margin-bottom: 60px;
 	word-spacing: 20px;
+	font-size: 1.1em;
+	font-weight: 400;
 }
+
+.centreForecast {
+	color: black;
+	text-align: center;
+	margin: 0 auto;
+	margin-top: -10px;
+	margin-bottom: 60px;
+	word-spacing: 20px;
+	font-size: 1.1em;
+	font-weight: 400;
+}
+
 
 .forecastRed {
 	color: #9d1717;
@@ -60,6 +69,8 @@
 	margin: 0 auto;
 	margin-top: -10px;
 	margin-bottom: 60px;
+	font-size: 1.1em;
+	font-weight: 400;
 }
 
 .today {
@@ -68,6 +79,7 @@
 	font-size: small;
 }
 
+//style rule for the temperature in the homepage
 .temperature {
 	flex: 2;
 	color: black;
@@ -114,6 +126,11 @@
 	margin-top: -80px;
 }
 
+.warningF {
+	width: 20px;
+	height: 20px;
+	margin-left: 15px;
+}
 //style rules for the warning page
 .warningTitle {
 	color: #9d1717;
@@ -131,6 +148,11 @@
 	font-weight: 600;
 }
 
+//style rules for the mountain and clouds
+.mountain {
+	margin-top: -80px;	
+}
+
 .clouds {
 	margin-top: -200px;
 }
@@ -138,7 +160,6 @@
 .cloudsForecast {
 	margin-left: 10px;
 	margin-top: -60px;
-
 }
 //style rules for the wind speed, humidity, and precipitation icons/descriptions
 .detailsContainer {
@@ -150,13 +171,31 @@
 .detailsIcon {
 	width: 30px;
 	height: 30px;
-	margin-top: 70px;
+	margin-top: 20px;
 	margin-right: 20px;
 	margin-left: 40px;
 }
 
 .detailsText {
 	color: black;
+	margin-right: 20px;
+	margin-left: 40px;
+}
+
+.detailsText {
+	color: black;
+	margin-right: 20px;
+	margin-left: 40px;
+}
+
+.tempsText {
+	color: black;
+	//put text in same line
+}
+
+.weatherIcon {
+	width: 30px;
+	height: 30px;
 	margin-right: 20px;
 	margin-left: 40px;
 }
