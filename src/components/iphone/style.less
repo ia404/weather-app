@@ -18,6 +18,12 @@
 	flex: 1;
 }
 
+.mountain {
+	margin-top: -80px;	
+	//stretch the mountain image to fit the screen
+
+}
+
 .details {
 	flex: 4;
 }
@@ -31,13 +37,29 @@
 	margin: 0 auto;
 }
 
+.forecastContainer {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	margin-left: 30px;
+	margin-top: 40px;
+}
+
 .forecast {
-	color: #9d1717;
-	width: 414px;
-	height: 736px;
-	text-align: center;
-	padding-top: 80px;
+	color: black;
+	text-align: left;
 	margin: 0 auto;
+	margin-top: -10px;
+	margin-bottom: 60px;
+	word-spacing: 20px;
+}
+
+.forecastRed {
+	color: #9d1717;
+	text-align: left;
+	margin: 0 auto;
+	margin-top: -10px;
+	margin-bottom: 60px;
 }
 
 .today {
@@ -113,7 +135,11 @@
 	margin-top: -200px;
 }
 
+.cloudsForecast {
+	margin-left: 10px;
+	margin-top: -60px;
 
+}
 //style rules for the wind speed, humidity, and precipitation icons/descriptions
 .detailsContainer {
 	display: flex;
