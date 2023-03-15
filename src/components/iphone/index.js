@@ -23,13 +23,13 @@ export default class Iphone extends Component {
 		super(props);
 		// temperature state
 
-		//Temp of 7days stored here
 		this.state.ctemp = null;
-
+		//storing states of all times, temperatures and conditions
 		this.state.times = null;
 		this.state.temps = null;
 		this.state.conditions = null;
 
+		//storing the individual temperatures of current day, and future week.
 		this.state.currenttemp = null;
 		this.state.temp = null;
 		this.state.temp2 = null;
@@ -37,7 +37,7 @@ export default class Iphone extends Component {
 		this.state.temp4 = null;
 		this.state.temp5 = null;
 		
-		//Storing states of 5 days
+		//Storing the actual date
 		this.state.current = null;
 		this.state.today = null;
 		this.state.second = null;
@@ -53,8 +53,8 @@ export default class Iphone extends Component {
 		this.state.windSpeed = null;
 		this.state.humidity = null;
 		this.state.visibility = null;
-		this.state.description = 'moderate rain';
-		this.state.currentWarning = true; //change to false in reality
+		this.state.description = null;
+		this.state.currentWarning = false; 
 		this.state.page = this.pages[0];
 	}
 
@@ -114,7 +114,7 @@ export default class Iphone extends Component {
 	findWeatherIcon = (i) => {
 		let description = this.state.conditions[i];
 		let temp = this.state.temps[i];
-		
+		//check if the descripton has any icon relevant to it
 		if (description.includes("heavy intensity rain")) {
 			return "../assets/icons//weather-thunder.png";
 		}else if (description.includes("rain")) {
@@ -127,6 +127,7 @@ export default class Iphone extends Component {
 			return "../assets/icons/weather-snow.png";
 		} 
 
+		//if there is no relevant icon, then use the temperature to choose an icon
 		if(temp >= 15 ){
 			return "../assets/icons/weather-sun.png";
 		} else if ((temp < 15 && temp >= 0) || temp < 0) {
@@ -141,9 +142,6 @@ export default class Iphone extends Component {
 
 	// the main render method for the iphone component
 	render() {
-		//fetch weatherdata
-		//setInterval(this.fetchWeatherData, 120000);
-
 		// check if temperature data is fetched, if so add the sign styling to the page
 		const tempStyles = this.state.ctemp ? `${style.temperature} ${style.filled}` : style.temperature;
 
@@ -152,10 +150,11 @@ export default class Iphone extends Component {
 				{/* change background depending on temperature */}
 
 				<div className={ style.header }>
-					{/* */  this.state.page === "home" && <img className={ style.mountain } src="../assets/backgrounds/mountain.png" alt="mountain" /> }
-				   	{/* */  this.state.page === "warning" && <img className={ style.hazard } src="../assets/icons/warning-forecast.png" alt="hazard" /> }
-				   	{/* */  this.state.page === "warning" && <img className={style.clouds } src="../assets/icons/clouds.png" alt="cloud" /> }
-				   	{/* */  this.state.page === "forecast" && <img className={style.cloudsForecast } src="../assets/icons/clouds2.png" alt="cloud" /> }
+					{/* add image to the background depending on what page it is on. */}
+					{ this.state.page === "home" && <img className={ style.mountain } src="../assets/backgrounds/mountain.png" alt="mountain" /> }
+				   	{ this.state.page === "warning" && <img className={ style.hazard } src="../assets/icons/warning-forecast.png" alt="hazard" /> }
+				   	{ this.state.page === "warning" && <img className={style.clouds } src="../assets/icons/clouds.png" alt="cloud" /> }
+				   	{ this.state.page === "forecast" && <img className={style.cloudsForecast } src="../assets/icons/clouds2.png" alt="cloud" /> }
 				</div>
 
 				<div className={ style.details }>
@@ -283,10 +282,10 @@ export default class Iphone extends Component {
 					{/* Give a warning if there is hevay snow */ this.state.description === "heavy snow" && <div className= { style.warningTitle }> HEAVY SNOW </div> }
 					{ this.state.description === "heavy snow" && <div className= { style.warningDescription }> POTENTIAL SLIPPING </div> }
 
-					{this.state.currenttemp > 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false  && <div className= { style.warningTitle }> NO WARNING AT THIS CURRENT TIME </div> }
+					{this.state.currenttemp > 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false  && <div className= { style.warningTitle }> NO WARNING AT THIS CURRENT TIME </div> }
 				
-					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking */  this.state.currenttemp[0] <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
-					{this.state.currenttemp[0] <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
+					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking */  this.state.currenttemp[0] <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
+					{this.state.currenttemp[0] <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
 
 				</div> }
 
@@ -314,7 +313,6 @@ export default class Iphone extends Component {
 	}
 
 	parseResponse = (parsed_json) => {
-		
 		//filter the temp so that it only shows the first temp when the date (dt_txt) of that temp includes 00:00:00
 		const temp_c = parsed_json.list.map(temps => temps['main']['temp']);
 		//get time of day
@@ -338,6 +336,7 @@ export default class Iphone extends Component {
 		this.setState({ times: time });
 		this.setState({ temps: temp_c });
 		this.setState({ conditions: description });
+
 		//retrieve the filtered temperature and description for the week
 		//description will be used to check if there is a warning
 
@@ -414,15 +413,13 @@ export default class Iphone extends Component {
 			sixth: this.changeDateToDay(lastDate)
 		});
 
-		// set states for fields so they could be rendered later on
-		//this.setState({description: parsed_json.list.map(temp => temp['weather'][0]['description'][0])});
+		this.setState({description: parsed_json.list.map(temp => temp['weather'][0]['description'])});
 
 		//check if weather condition is a dangerous warning -> throw hazard 
-		// if (["heavy intensity rain", "moderate rain", "heavy snow"].includes(parsed_json['weather']['0']['description'])){
-		// 	this.setState({ currentWarning: true }); 
-		// }
-
-		//temporary
-		this.setState({ currentWarning: true });      
+		if (["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0])){
+			this.setState({ currentWarning: true }); 
+		} else {
+			this.setState({ currentWarning: false });
+		}
 	}
 }
