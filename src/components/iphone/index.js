@@ -21,40 +21,22 @@ export default class Iphone extends Component {
 	// a constructor with initial set states
 	constructor(props){
 		super(props);
-		// temperature state
-
+		// temperature statem
 		this.state.ctemp = null;
 		//storing states of all times, temperatures and conditions
-		this.state.times = null;
-		this.state.temps = null;
-		this.state.conditions = null;
+		this.state.times, this.state.temps, this.state.conditions = null;
 
 		//storing the individual temperatures of current day, and future week.
-		this.state.currenttemp = null;
-		this.state.temp = null;
-		this.state.temp2 = null;
-		this.state.temp3 = null;
-		this.state.temp4 = null;
-		this.state.temp5 = null;
+		this.state.currenttemp, this.state.temp, this.state.temp2, this.state.temp3, this.state.temp4, this.state.temp5 = null;
 		
 		//Storing the actual date
-		this.state.current = null;
-		this.state.today = null;
-		this.state.second = null;
-		this.state.third = null;
-		this.state.fourth = null;
-		this.state.fifth = null;
-		this.state.sixth = null;
+		this.state.current,this.state.today, this.state.second, this.state.third, this.state.fourth, this.state.fifth, this.state.sixth = null;
 
 		//description of weather
 		this.pages = ["home", "forecast", "warning"];
-		this.state.temp = null;
-		this.state.celcius = false;
-		this.state.windSpeed = null;
-		this.state.humidity = null;
-		this.state.visibility = null;
-		this.state.description = null;
-		this.state.currentWarning = false; 
+		this.state.temp, this.state.windSpeed, this.state.humidity, this.state.visibility, this.state.description = null;
+		this.state.currentWarning, this.state.celcius = false;
+
 		this.state.page = this.pages[0];
 	}
 
@@ -221,7 +203,7 @@ export default class Iphone extends Component {
 					</div> }
 				</div>
 				{/*check if the user is on the homepage so it can output the wind speed, humidity and precipitation */  this.state.page === "home" && <div className={ style.home }>
-					<span className={ tempStyles }> { this.state.ctemp } </span>
+					<span className={ tempStyles }> { Math.round(this.state.ctemp) } </span>
 
 					<div className={style.detailsContainer}>
 						
@@ -237,7 +219,7 @@ export default class Iphone extends Component {
 
 						<div className={style.detailsType}>
 							<img className={style.detailsIcon} src="../assets/icons/wind.png" alt="wind-speed" />
-							<p className={style.detailsText}> { this.state.windSpeed }km/h </p>
+							<p className={style.detailsText}> { this.state.windSpeed }m/h </p>
 						</div>
 					</div>
 
@@ -314,7 +296,7 @@ export default class Iphone extends Component {
 
 	parseResponse = (parsed_json) => {
 		//filter the temp so that it only shows the first temp when the date (dt_txt) of that temp includes 00:00:00
-		const temp_c = parsed_json.list.map(temps => temps['main']['temp']);
+		const temp_c = parsed_json.list.map(temps => Math.round(temps['main']['temp']));
 		//get time of day
 		let time = parsed_json.list.map(time => time['dt_txt']);
 		//split the time so that it only shows the time in the format HH
@@ -341,7 +323,7 @@ export default class Iphone extends Component {
 		//description will be used to check if there is a warning
 
 		this.setState({ctemp: temp_c[0]});
-		const filteredTemp = parsed_json.list.filter(temp => temp['dt_txt'].includes("00:00:00")).map(temp => temp['main']['temp']);
+		const filteredTemp = parsed_json.list.filter(temp => temp['dt_txt'].includes("00:00:00")).map(temp => Math.round(temp['main']['temp']));
 		const filteredDescription = parsed_json.list.filter(temp => temp['dt_txt'].includes("00:00:00")).map(temp => temp['weather'][0]['description']);
 		//Get date-time info from JSON
 		//filter so every 00:00:00 is displayed
@@ -349,7 +331,7 @@ export default class Iphone extends Component {
 		const filteredDates = dates.filter(date => date.includes("00:00:00"));
 		
 		//retrieve the filtered windspeed for the current day/time
-		this.setState({windSpeed: parsed_json.list.map(wind => wind['wind']['speed'])[0] });
+		this.setState({windSpeed: parsed_json.list.map(wind => Math.round(wind['wind']['speed']))[0] });
 
 		//retrieve the filtered visibility for the current day/time
 		this.setState({visibility: parsed_json.list.map(visibility => visibility['visibility'])[0]});
