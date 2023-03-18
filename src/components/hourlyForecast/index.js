@@ -5,8 +5,8 @@ export default class HourlyForecast extends Component {
 
 	//function to find corresponding icon for the weather description
 	findWeatherIcon = () => {
-		let description = this.props.details[1];
-		let temp = this.props.details[2];
+		let description = this.props.condition;
+		let temp = this.props.temperature;
 		//check if the descripton has any icon relevant to it
 		if (description.includes("heavy intensity rain")) {
 			return "../assets/icons//weather-thunder.png";
@@ -31,9 +31,9 @@ export default class HourlyForecast extends Component {
 	render() {
 		return (
 			<div>
-				<p  className={style.detailsText}> { this.props.details[0] } </p>
+				<p  className={style.detailsText}> { this.props.day } </p>
 				<img className={style.weatherIcon} src={ this.findWeatherIcon() } /> 
-				<p className={style.detailsText}> { this.props.details[2] }° </p>
+				<p className={style.detailsText}> { this.props.temperature }° </p>
 			</div>			
 		);
 	}

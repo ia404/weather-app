@@ -42,7 +42,7 @@ export default class Iphone extends Component {
 		this.pages = ["home", "forecast", "warning"];
 		//set the state of the page to the home page 
 		this.state.page = this.pages[0];
-		this.warnings = ["heavy intensity rain", "moderate rain", "heavy snow", "thunderstorm"];
+		this.warnings = ["heavy intensity rain", "moderate rain", "heavy snow", "thunderstorm", "tornado", "squall", "volcanic ash"];
 		this.warningsDescription = {
 			"heavy intensity rain": ["HEAVY INTENSITY RAIN", "POTENTIAL FLOODING AND LOW VISIBILITY"],
 			"moderate rain": ["MODERATE RAIN", "POTENTIAL FLOODING AND LOW VISIBILITY"],
@@ -130,7 +130,7 @@ export default class Iphone extends Component {
 	}
 	
 	//function to get time
-	getTime= (i) => {
+	getDay = (i) => {
 		return this.state.times[i];
 	}
 
@@ -166,12 +166,12 @@ export default class Iphone extends Component {
 				{/* check if the user is on the forecast page */  this.state.page === "forecast" && <div>
 					<div className={ style.forecastContainer }>
 						    {/* daily temperature for the forecast page */}
-							<DailyForecast details={[this.temps[0][1], this.dates[0], this.temps[0][0]]}/>
-							<DailyForecast details={[this.temps[1][1], this.dates[1], this.temps[1][0]]}/>
-							<DailyForecast details={[this.temps[2][1], this.dates[2], this.temps[2][0]]}/>
-							<DailyForecast details={[this.temps[3][1], this.dates[3], this.temps[3][0]]}/>
-							<DailyForecast details={[this.temps[4][1], this.dates[4], this.temps[4][0]]}/>
-							<DailyForecast details={[this.temps[4][1], this.dates[5], this.temps[5][0]]}/>
+							<DailyForecast warning={this.temps[0][1]} day={this.dates[0]} temperature={this.temps[0][0]}/>
+							<DailyForecast warning={this.temps[1][1]} day={this.dates[1]} temperature={this.temps[1][0]}/>
+							<DailyForecast warning={this.temps[2][1]} day={this.dates[2]} temperature={this.temps[2][0]}/>
+							<DailyForecast warning={this.temps[3][1]} day={this.dates[3]} temperature={this.temps[3][0]}/>
+							<DailyForecast warning={this.temps[4][1]} day={this.dates[4]} temperature={this.temps[4][0]}/>
+							<DailyForecast warning={this.temps[5][1]} day={this.dates[5]} temperature={this.temps[5][0]}/>
 
 							<div>
 								<p className={ style.forecastRed }> {this.dates[6]}: Not applicable at this current time. </p>
@@ -185,30 +185,28 @@ export default class Iphone extends Component {
 
 					<div className={style.detailsContainer}>
 						{/* create climate objects for the home page */}
-						<CurrentClimate details={["../assets/icons/humidity.png", this.state.humidity, '%']} />
-						<CurrentClimate details={["../assets/icons/visibility.png", this.state.visibility, 'm']} />
-						<CurrentClimate details={["../assets/icons/wind.png", this.state.windSpeed, 'm/h']} />
+						<CurrentClimate src={"../assets/icons/humidity.png"} value="this.state.humidity" metric={"%"} />
+						<CurrentClimate src={"../assets/icons/visibility.png"} value={this.state.visibility}   metric={"m"} />
+						<CurrentClimate src={"../assets/icons/wind.png"} value={this.state.windSpeed}   metric={"m/h"} />
 					</div>
 
 					<div className={style.detailsContainer}>
 						{/* create climate objects for the home page */}
-						{ this.state.times && <HourlyForecast details={[this.getTime(0), this.getCondition(0), this.getTemperature(0)]}/>} 
-						{ this.state.times && <HourlyForecast details={[this.getTime(1), this.getCondition(1), this.getTemperature(1)]}/>} 
-						{ this.state.times && <HourlyForecast details={[this.getTime(2), this.getCondition(2), this.getTemperature(2)]}/>} 
-						{ this.state.times && <HourlyForecast details={[this.getTime(3), this.getCondition(3), this.getTemperature(3)]}/>}
+						{ this.state.times && <HourlyForecast day={this.getDay(0)} condition={this.getCondition(0)} temperature ={this.getTemperature(0)}/> } 
+						{ this.state.times && <HourlyForecast day={this.getDay(1)} condition={this.getCondition(1)} temperature ={this.getTemperature(1)}/> } 
+						{ this.state.times && <HourlyForecast day={this.getDay(2)} condition={this.getCondition(2)} temperature ={this.getTemperature(2)}/> } 
+						{ this.state.times && <HourlyForecast day={this.getDay(3)} condition={this.getCondition(3)} temperature ={this.getTemperature(3)}/> }
 					</div>
 				</div> }
 
 				{/*If the user is on the warning page, they are able to see the exact warning */  this.state.page === "warning" && <div class={ style.warning }>
 					<div> Ensure to dress up correctly for: </div>
-
 					{/* Give a warning if there is heavy intesnity rain */  }
 					{ this.warnings.includes(this.state.description[0]) === true && <div className= { style.warningTitle }> { this.warningsDescription[this.state.description[0]][0]}</div> }
 					{ this.warnings.includes(this.state.description[0]) === true &&<div className= { style.warningDescription }> { this.warningsDescription[this.state.description[0]][1]}</div> }
 
 					{this.state.ctemp <= 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE  </div> }
 					{this.state.ctemp <= 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
-
 				</div> }
 
 				<div className={ style.footer }>

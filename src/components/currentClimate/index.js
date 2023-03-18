@@ -5,8 +5,8 @@ export default class CurrentClimate extends Component {
 	render() {
 		return (
 			<div>
-				<img className={style.detailsIcon} src={this.props.details[0]} />
-				<p className={style.detailsText}> { this.props.details[1] }{this.props.details[2]}</p>
+				<img className={style.detailsIcon} src={this.props.src} />
+				<p className={style.detailsText}> { this.props.value }{this.props.metric}</p>
 			</div>			
 		);
 	}
