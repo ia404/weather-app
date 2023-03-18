@@ -29,11 +29,11 @@ export default class Iphone extends Component {
 		//storing states of all times, temperatures and conditions
 		this.state.times, this.state.temps, this.state.conditions = null;
 
-		//storing the individual temperatures of current day, and future week.
-		this.state.currenttemp, this.state.temp, this.state.temp2, this.state.temp3, this.state.temp4, this.state.temp5 = null;
-		
 		//storing the actual dates of the present day and the future week.
 		this.dates = [];
+
+		//storing all temperatures fetched by API
+		this.temps = [];
 
 		//description of weather
 		this.state.temp, this.state.windSpeed, this.state.humidity, this.state.visibility, this.state.description = null;
@@ -123,6 +123,15 @@ export default class Iphone extends Component {
 		return this.state.times[i];
 	}
 
+	//add the temperature and warning to the array
+	pushTempToArr 	= (temperature, description) => {
+		let warnings = ["heavy intensity rain", "moderate rain", "heavy snow"]
+		if (temperature <= 0 || warnings.includes(description)) {
+			return  this.temps.push([temperature, true]);
+		} else {
+			return  this.temps.push([temperature, false]);
+		} 
+	}	
 	componentDidMount() {
 		this.fetchWeatherData();
 	}
@@ -147,12 +156,12 @@ export default class Iphone extends Component {
 				{/* check if the user is on the forecast page */  this.state.page === "forecast" && <div>
 					<div className={ style.forecastContainer }>
 						    {/* daily temperature for the forecast page */}
-							<DailyForecast details={[this.state.currenttemp[1], this.dates[0], this.state.currenttemp[0]]}/>
-							<DailyForecast details={[this.state.temp[1], this.dates[1], this.state.temp[0]]}/>
-							<DailyForecast details={[this.state.temp2[1], this.dates[2], this.state.temp2[0]]}/>
-							<DailyForecast details={[this.state.temp3[1], this.dates[3], this.state.temp3[0]]}/>
-							<DailyForecast details={[this.state.temp4[1], this.dates[4], this.state.temp4[0]]}/>
-							<DailyForecast details={[this.state.temp5[1], this.dates[5], this.state.temp5[0]]}/>
+							<DailyForecast details={[this.temps[0][1], this.dates[0], this.temps[0][0]]}/>
+							<DailyForecast details={[this.temps[1][1], this.dates[1], this.temps[1][0]]}/>
+							<DailyForecast details={[this.temps[2][1], this.dates[2], this.temps[2][0]]}/>
+							<DailyForecast details={[this.temps[3][1], this.dates[3], this.temps[3][0]]}/>
+							<DailyForecast details={[this.temps[4][1], this.dates[4], this.temps[4][0]]}/>
+							<DailyForecast details={[this.temps[4][1], this.dates[5], this.temps[5][0]]}/>
 
 							<div>
 								<p className={ style.forecastRed }> {this.dates[6]}: Not applicable at this current time. </p>
@@ -179,7 +188,6 @@ export default class Iphone extends Component {
 						{ this.state.times && <HourlyForecast details={[this.getTime(3), this.getCondition(3), this.getTemperature(3)]}/>}
 					</div>
 				</div> }
-				
 
 				{/*If the user is on the warning page, they are able to see the exact warning */  this.state.page === "warning" && <div class={ style.warning }>
 					<div> Ensure to dress up correctly for: </div>
@@ -269,41 +277,12 @@ export default class Iphone extends Component {
 		//Setting states for temp
 		//change state to true if the temp is below 0 or has a warning
 		let warnings = ["heavy intensity rain", "moderate rain", "heavy snow"]
-		if (temp_c[0] <= 0 || warnings.includes(this.state.description[0])) {
-			this.setState({ currenttemp: [temp_c[0], true] });
-		} else {
-			this.setState({ currenttemp: [temp_c[0], false] });    
-		} 
-
-		if (filteredTemp[0] <= 0 || warnings.includes(filteredDescription[0])) {
-			this.setState({ temp: [filteredTemp[0], true] });
-		} else {
-			this.setState({ temp: [filteredTemp[0], false] });    
-		} 
-
-		if (filteredTemp[1] <= 0 ||warnings.includes(filteredDescription[1])) {
-			this.setState({ temp2: [filteredTemp[1], true] });
-		} else {
-			this.setState({ temp2: [filteredTemp[1], false] });    
-		} 
-
-		if (filteredTemp[2] <= 0 || warnings.includes(filteredDescription[2])) {
-			this.setState({ temp3: [filteredTemp[2], true] });
-		} else {
-			this.setState({ temp3: [filteredTemp[2], false] });    
-		} 
-
-		if (filteredTemp[3] <= 0 || warnings.includes(filteredDescription[3])) {
-			this.setState({ temp4: [filteredTemp[3], true] });
-		} else {
-			this.setState({ temp4: [filteredTemp[3], false] });    
-		} 
-
-		if (filteredTemp[4] <= 0 || warnings.includes(filteredDescription[4])) {
-			this.setState({ temp5: [filteredTemp[4], true] });
-		} else {
-			this.setState({ temp5: [filteredTemp[4], false] });    
-		} 
+		this.pushTempToArr(temp_c[0], this.state.description[0]); //current temp: index 0
+		this.pushTempToArr(filteredTemp[0], filteredDescription[0]);
+		this.pushTempToArr(filteredTemp[1], filteredDescription[1]);
+		this.pushTempToArr(filteredTemp[2], filteredDescription[2]);
+		this.pushTempToArr(filteredTemp[3], filteredDescription[3]);
+		this.pushTempToArr(filteredTemp[4], filteredDescription[4]);
 
 		//get the date whos weather cannot be retrieved due to API restrictions
 		let last = new Date(filteredDates[4]);
