@@ -210,12 +210,15 @@ export default class Iphone extends Component {
 					<span className={ tempStyles }> { Math.round(this.state.ctemp) } </span>
 
 					<div className={style.detailsContainer}>
+						{/* create climate objects for the home page */}
 						<CurrentClimate details={["../assets/icons/humidity.png", this.state.humidity, '%']} />
 						<CurrentClimate details={["../assets/icons/visibility.png", this.state.visibility, 'm']} />
 						<CurrentClimate details={["../assets/icons/wind.png", this.state.windSpeed, 'm/h']} />
 					</div>
 
 					<div className={style.detailsContainer}>
+						{/* create climate objects for the home page */}
+
 						{ this.state.times && <HourlyForecast details={[this.getTime(0), this.getCondition(0), this.getTemperature(0)]}/>} 
 						{ this.state.times && <HourlyForecast details={[this.getTime(1), this.getCondition(1), this.getTemperature(1)]}/>} 
 						{ this.state.times && <HourlyForecast details={[this.getTime(2), this.getCondition(2), this.getTemperature(2)]}/>} 
