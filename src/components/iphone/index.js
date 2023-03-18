@@ -205,25 +205,14 @@ export default class Iphone extends Component {
 						</div> 
 					</div> }
 				</div>
+
 				{/*check if the user is on the homepage so it can output the wind speed, humidity and precipitation */  this.state.page === "home" && <div className={ style.home }>
 					<span className={ tempStyles }> { Math.round(this.state.ctemp) } </span>
 
 					<div className={style.detailsContainer}>
-						
-						<div>
-							<img className={style.detailsIcon} src="../assets/icons/humidity.png" alt="humidity" />
-							<p className={style.detailsText}> { this.state.humidity }% </p>
-						</div>	
-
-						<div>
-							<img className={style.detailsIcon} src="../assets/icons/visibility.png" alt="visibility" />
-							<p className={style.detailsText}> { this.state.visibility }m </p>
-						</div>
-
-						<div className={style.detailsType}>
-							<img className={style.detailsIcon} src="../assets/icons/wind.png" alt="wind-speed" />
-							<p className={style.detailsText}> { this.state.windSpeed }m/h </p>
-						</div>
+						<CurrentClimate details={["../assets/icons/humidity.png", this.state.humidity, '%']} />
+						<CurrentClimate details={["../assets/icons/visibility.png", this.state.visibility, 'm']} />
+						<CurrentClimate details={["../assets/icons/wind.png", this.state.windSpeed, 'm/h']} />
 					</div>
 
 					<div className={style.detailsContainer}>

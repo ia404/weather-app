@@ -3,8 +3,7 @@ import { h, render, Component } from 'preact';
 import style from './style';
 export default class hourlyForecast extends Component {
 
-	// rendering a function when the button is clicked
-		//function to find corresponding icon for the weather description
+	//function to find corresponding icon for the weather description
 	findWeatherIcon = () => {
 		let description = this.props.details[1];
 		let temp = this.props.details[2];
