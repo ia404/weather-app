@@ -12,6 +12,8 @@ import $ from 'jquery';
 import Button from '../button';
 import LeftArrow from '../leftArrow';
 import RightArrow from '../rightArrow';
+import HourlyForecast from '../hourlyForecast';
+import CurrentClimate from '../currentClimate';
 
 // API KEY: c136ee287fd54b2489b78c2b03ce8899
 export default class Iphone extends Component {
@@ -93,31 +95,6 @@ export default class Iphone extends Component {
 		return days[new Date(date).getDay()];
 	}
 
-	//function to find corresponding icon for the weather description
-	findWeatherIcon = (i) => {
-		let description = this.state.conditions[i];
-		let temp = this.state.temps[i];
-		//check if the descripton has any icon relevant to it
-		if (description.includes("heavy intensity rain")) {
-			return "../assets/icons//weather-thunder.png";
-		}else if (description.includes("rain")) {
-			return "../assets/icons/weather-rain.png";
-		} else if (description.includes("clouds")) {
-			return "../assets/icons/weather-cloud.png";
-		} else if (description.includes("clear")) {
-			return "../assets/icons/weather-sun.png";
-		} else if (description.includes("snow")) {
-			return "../assets/icons/weather-snow.png";
-		} 
-
-		//if there is no relevant icon, then use the temperature to choose an icon
-		if(temp >= 15 ){
-			return "../assets/icons/weather-sun.png";
-		} else if ((temp < 15 && temp >= 0) || temp < 0) {
-			return "../assets/icons/weather-cloud.png";
-		}
-	}
-
 	//function which creates a dynamic background depending on the current temperature
 	findBackground = () => {
 		let temp = this.state.ctemp;
@@ -129,7 +106,22 @@ export default class Iphone extends Component {
 			return style.containerClear;
 		}
 	}
+
+	//function return temperature
+	getTemperature = (i) => {
+		return this.state.temps[i];
+	}
+
+	//function to get the condition
+	getCondition = (i) => {
+		return this.state.conditions[i];
+	}
 	
+	//function to get time
+	getTime= (i) => {
+		return this.state.times[i];
+	}
+
 	componentDidMount() {
 		this.fetchWeatherData();
 	}
@@ -235,31 +227,11 @@ export default class Iphone extends Component {
 					</div>
 
 					<div className={style.detailsContainer}>
-						{ this.state.times && <div>
-							<p  className={style.detailsText}> { this.state.times[0] } </p>
-							<img className={style.weatherIcon} src={ this.findWeatherIcon(0) } /> 
-							<p className={style.detailsText}> { this.state.temps[0] }° </p>
-						</div>} 
-
-						{ this.state.times && <div>
-							<p  className={style.detailsText}> { this.state.times[1] } </p>
-							<img className={style.weatherIcon} src={ this.findWeatherIcon(1) } /> 
-							<p className={style.detailsText}> { this.state.temps[1] }° </p>
-						</div>} 
-
-						{ this.state.times && <div>
-							<p  className={style.detailsText}> { this.state.times[2] } </p>
-							<img className={style.weatherIcon} src={ this.findWeatherIcon(2) } /> 
-							<p className={style.detailsText}> { this.state.temps[2] }° </p>
-						</div>} 
-
-						{ this.state.times && <div>
-							<p  className={style.detailsText}> { this.state.times[3] } </p>
-							<img className={style.weatherIcon} src={ this.findWeatherIcon(3) } /> 
-							<p className={style.detailsText}> { this.state.temps[3] }° </p>
-						</div>} 
+						{ this.state.times && <HourlyForecast details={[this.getTime(0), this.getCondition(0), this.getTemperature(0)]}/>} 
+						{ this.state.times && <HourlyForecast details={[this.getTime(1), this.getCondition(1), this.getTemperature(1)]}/>} 
+						{ this.state.times && <HourlyForecast details={[this.getTime(2), this.getCondition(2), this.getTemperature(2)]}/>} 
+						{ this.state.times && <HourlyForecast details={[this.getTime(3), this.getCondition(3), this.getTemperature(3)]}/>}
 					</div>
-
 				</div> }
 				
 
@@ -283,21 +255,19 @@ export default class Iphone extends Component {
 				<div className={ style.footer }>
 					<div className={ style_leftarrow.container }>
 						{/* this creates a left arrow button which can be used to go back a page */ }
-						<LeftArrow  className={ style_leftarrow.button } clickFunction={ this.changePageBackward }/>
+						<LeftArrow  clickFunction={ this.changePageBackward }/>
 					</div>
 					<div className={ style_button.container }>
 						{/* redirects the user to a specific page by clicking the button */ }
-						<Button  className={ style_button.button } clickFunction={() => this.changePage(0)}/> 
-						<Button  className={ style_button.button } clickFunction={() => this.changePage(1)}/> 
-						
+						<Button  clickFunction={() => this.changePage(0)}/> 
+						<Button  clickFunction={() => this.changePage(1)}/> 
 						{/* if there is a warning, then there'll be a third button allowing the user to see the warning without having to use the arrow keys */ }
-						{ this.state.currentWarning === true && <Button  className={ style_button.button } clickFunction={() => this.changePage(2)}/> }
+						{ this.state.currentWarning === true && <Button clickFunction={() => this.changePage(2)}/> }
 					</div>
 					<div className={ style_rightarrow.container }>
 						{/* this creates a right arrow button which can be used to go forward a page */ }
-						<RightArrow  className={ style_rightarrow.button } clickFunction={ this.changePageForward }/>
+						<RightArrow clickFunction={ this.changePageForward }/>
 					</div>
-
 				</div>
 			</div>
 		);
