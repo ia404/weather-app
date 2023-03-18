@@ -1,7 +1,7 @@
 // import preact
 import { h, render, Component } from 'preact';
 import style from './style';
-export default class hourlyForecast extends Component {
+export default class HourlyForecast extends Component {
 
 	//function to find corresponding icon for the weather description
 	findWeatherIcon = () => {

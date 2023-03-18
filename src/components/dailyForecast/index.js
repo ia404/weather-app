@@ -1,8 +1,7 @@
 // import preact
 import { h, render, Component } from 'preact';
 import style from './style';
-export default class hourlyForecast extends Component {
-
+export default class DailyForecast extends Component {
 	render() {
 		if(this.props.details[0] === true) {
 			return (

@@ -42,6 +42,17 @@ export default class Iphone extends Component {
 		this.pages = ["home", "forecast", "warning"];
 		//set the state of the page to the home page 
 		this.state.page = this.pages[0];
+		this.warnings = ["heavy intensity rain", "moderate rain", "heavy snow", "thunderstorm"];
+		this.warningsDescription = {
+			"heavy intensity rain": ["HEAVY INTENSITY RAIN", "POTENTIAL FLOODING AND LOW VISIBILITY"],
+			"moderate rain": ["MODERATE RAIN", "POTENTIAL FLOODING AND LOW VISIBILITY"],
+			"thunderstorm": ["THUNDERSTORM", "POTENTIAL LIGHTNING - TAKE SHELTER"],
+			"heavy snow": ["HEAVY SNOW", "POTENTIAL SLIPPING"],
+			"tornado": ["TORNADO", "POTENTIAL DAMAGE TO PROPERTY"],
+			"squall": ["SQUALL", "POTENTIAL INJURIES"],
+			"volcanic ash": ["VOLCANIC ASH", "INHALING CAN CAUSE BREATHING PROBLEMS"]
+		};			
+
 	}
 
 	//create pages for the iphone
@@ -125,8 +136,7 @@ export default class Iphone extends Component {
 
 	//add the temperature and warning to the array
 	pushTempToArr 	= (temperature, description) => {
-		let warnings = ["heavy intensity rain", "moderate rain", "heavy snow"]
-		if (temperature <= 0 || warnings.includes(description)) {
+		if (temperature <= 0 || this.warnings.includes(description)) {
 			return  this.temps.push([temperature, true]);
 		} else {
 			return  this.temps.push([temperature, false]);
@@ -192,17 +202,12 @@ export default class Iphone extends Component {
 				{/*If the user is on the warning page, they are able to see the exact warning */  this.state.page === "warning" && <div class={ style.warning }>
 					<div> Ensure to dress up correctly for: </div>
 
-					{/* Give a warning if there is heavy intesnity rain */  this.state.description === "heavy intensity rain" && <div className= { style.warningTitle }> HEAVY INTENSITY RAIN </div> }
-					{ this.state.description === "heavy intensity rain" && <div className= { style.warningDescription }> POTENTIAL FLOODING AND LOW VISIBILITY </div> }
+					{/* Give a warning if there is heavy intesnity rain */  }
+					{ this.warnings.includes(this.state.description[0]) === true && <div className= { style.warningTitle }> { this.warningsDescription[this.state.description[0]][0]}</div> }
+					{ this.warnings.includes(this.state.description[0]) === true &&<div className= { style.warningDescription }> { this.warningsDescription[this.state.description[0]][1]}</div> }
 
-					{/* Give a warning if there is moderate rain */ this.state.description === "moderate rain" && <div className= { style.warningTitle }> MODERATE RAIN </div> }
-					{ this.state.description === "moderate rain" && <div className= { style.warningDescription }> POTENTIAL FLOODING AND LOW VISIBILITY </div> }
-
-					{/* Give a warning if there is hevay snow */ this.state.description === "heavy snow" && <div className= { style.warningTitle }> HEAVY SNOW </div> }
-					{ this.state.description === "heavy snow" && <div className= { style.warningDescription }> POTENTIAL SLIPPING </div> }
-
-					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking (ensure there isnt any other warning) */  this.state.ctemp <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
-					{this.state.ctemp <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
+					{this.state.ctemp <= 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE  </div> }
+					{this.state.ctemp <= 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
 
 				</div> }
 
@@ -273,10 +278,9 @@ export default class Iphone extends Component {
 		this.setState({humidity: parsed_json.list.map(humidity => humidity['main']['humidity'])[0]}); 
 		
 		this.setState({description: parsed_json.list.map(temp => temp['weather'][0]['description'])});
-
+		
 		//Setting states for temp
 		//change state to true if the temp is below 0 or has a warning
-		let warnings = ["heavy intensity rain", "moderate rain", "heavy snow"]
 		this.pushTempToArr(temp_c[0], this.state.description[0]); //current temp: index 0
 		this.pushTempToArr(filteredTemp[0], filteredDescription[0]);
 		this.pushTempToArr(filteredTemp[1], filteredDescription[1]);
@@ -302,7 +306,7 @@ export default class Iphone extends Component {
 		this.dates.push(this.changeDateToDay(lastDate));
 
 		//check if weather condition is a dangerous warning -> throw hazard 
-		if (["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) || this.state.ctemp <= 0){
+		if (this.warnings.includes(this.state.description[0]) || this.state.ctemp <= 0){
 			this.setState({ currentWarning: true }); 
 		} else {
 			this.setState({ currentWarning: false });

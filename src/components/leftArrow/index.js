@@ -1,7 +1,7 @@
 // import preact
 import { h, render, Component } from 'preact';
 import style from './style';
-export default class Button extends Component {
+export default class LeftArrow extends Component {
 	// rendering a function when the button is clicked
 	render() {
 		let cFunction = this.props.clickFunction;
