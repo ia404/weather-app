@@ -185,7 +185,7 @@ export default class Iphone extends Component {
 
 					<div className={style.detailsContainer}>
 						{/* create climate objects for the home page */}
-						<CurrentClimate src={"../assets/icons/humidity.png"} value="this.state.humidity" metric={"%"} />
+						<CurrentClimate src={"../assets/icons/humidity.png"} value={this.state.humidity} metric={"%"} />
 						<CurrentClimate src={"../assets/icons/visibility.png"} value={this.state.visibility}   metric={"m"} />
 						<CurrentClimate src={"../assets/icons/wind.png"} value={this.state.windSpeed}   metric={"m/h"} />
 					</div>
