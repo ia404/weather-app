@@ -14,6 +14,7 @@ import LeftArrow from '../leftArrow';
 import RightArrow from '../rightArrow';
 import HourlyForecast from '../hourlyForecast';
 import CurrentClimate from '../currentClimate';
+import DailyForecast from '../dailyForecast';
 
 // API KEY: c136ee287fd54b2489b78c2b03ce8899
 export default class Iphone extends Component {
@@ -145,60 +146,14 @@ export default class Iphone extends Component {
 				<div className={ style.details }>
 				{/* check if the user is on the forecast page */  this.state.page === "forecast" && <div>
 					<div className={ style.forecastContainer }>
-							{ this.state.currenttemp[1] === true && <div> 
-								<p  className={ style.forecast }> {this.dates[0]} </p> 
-								<p className={ style.centreForcast}> {this.state.currenttemp[0]}°
-									<img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" />
-								</p>
-							</div> }
-							{ this.state.currenttemp[1] === false && <div> 
-								<p className={ style.forecast }>  {this.dates[0]} {this.state.currenttemp[0]}° </p>
-							</div> }					
+						    {/* daily temperature for the forecast page */}
+							<DailyForecast details={[this.state.currenttemp[1], this.dates[0], this.state.currenttemp[0]]}/>
+							<DailyForecast details={[this.state.temp[1], this.dates[1], this.state.temp[0]]}/>
+							<DailyForecast details={[this.state.temp2[1], this.dates[2], this.state.temp2[0]]}/>
+							<DailyForecast details={[this.state.temp3[1], this.dates[3], this.state.temp3[0]]}/>
+							<DailyForecast details={[this.state.temp4[1], this.dates[4], this.state.temp4[0]]}/>
+							<DailyForecast details={[this.state.temp5[1], this.dates[5], this.state.temp5[0]]}/>
 
-							{ this.state.temp[1] === true && <div> 
-								<p className={ style.forecast }> {this.dates[1]} {this.state.temp[0]}° 
-									<img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" />
-								</p>
-							</div> }
-							{ this.state.temp[1] === false && <div> 
-								<p  className={ style.forecast }> {this.dates[1]} {this.state.temp[0]}° </p>
-							</div> }
-
-							{ this.state.temp2[1] === true && <div> 
-								<p className={ style.forecast }> {this.dates[2]} {this.state.temp2[0]}° 
-									<img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" />
-								</p>
-							</div> }
-							{ this.state.temp2[1] === false && <div> 
-								<p className={ style.forecast }> {this.dates[2]} {this.state.temp2[0]}° </p>
-							</div> }
-
-							{ this.state.temp3[1] === true && <div> 
-								<p className={ style.forecast }> {this.dates[3]} {this.state.temp3[0]}°
-									<img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" />
-								</p>
-							</div> }
-							{ this.state.temp3[1] === false && <div> 
-								<p className={ style.forecast }> {this.dates[3]} {this.state.temp3[0]}° </p>
-							</div> }
-
-							{ this.state.temp4[1] === true && <div> 
-								<p className={ style.forecast }> {this.dates[4]} {this.state.temp4[0]}°
-									<img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" />
-								</p>
-							</div> }
-							{ this.state.temp4[1] === false && <div> 
-								<p className={ style.forecast }> {this.dates[4]} {this.state.temp4[0]}° </p>
-							</div> }
-
-							{ this.state.temp5[1] === true && <div> 
-								<p className={ style.forecast }> {this.dates[5]} {this.state.temp5[0]}° 
-								<img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" />
-								</p>
-							</div> }
-							{ this.state.temp5[1] === false && <div> 
-								<p className={ style.forecast }> {this.dates[5]} {this.state.temp5[0]}° </p>
-							</div> }
 							<div>
 								<p className={ style.forecastRed }> {this.dates[6]}: Not applicable at this current time. </p>
 							</div>
