@@ -2,16 +2,16 @@
 import { h, render, Component } from 'preact';
 // import stylesheets for iphone
 import style from './style';
-import style_button from '../button/style_button';
-import style_leftarrow from '../button/left_arrow';
-import style_rightarrow from '../button/right_arrow';
+import style_button from '../button/style';
+import style_leftarrow from '../leftArrow/style';
+import style_rightarrow from '../rightArrow/style';
 
 // import jquery for API calls
 import $ from 'jquery';
 // import the Button component
 import Button from '../button';
-
-
+import LeftArrow from '../leftArrow';
+import RightArrow from '../rightArrow';
 
 // API KEY: c136ee287fd54b2489b78c2b03ce8899
 export default class Iphone extends Component {
@@ -21,7 +21,7 @@ export default class Iphone extends Component {
 	// a constructor with initial set states
 	constructor(props){
 		super(props);
-		// temperature statem
+		//current temperature state
 		this.state.ctemp = null;
 		//storing states of all times, temperatures and conditions
 		this.state.times, this.state.temps, this.state.conditions = null;
@@ -29,14 +29,15 @@ export default class Iphone extends Component {
 		//storing the individual temperatures of current day, and future week.
 		this.state.currenttemp, this.state.temp, this.state.temp2, this.state.temp3, this.state.temp4, this.state.temp5 = null;
 		
-		//Storing the actual date
+		//storing the actual dates of the present day and the future week.
 		this.state.current,this.state.today, this.state.second, this.state.third, this.state.fourth, this.state.fifth, this.state.sixth = null;
 
 		//description of weather
-		this.pages = ["home", "forecast", "warning"];
 		this.state.temp, this.state.windSpeed, this.state.humidity, this.state.visibility, this.state.description = null;
 		this.state.currentWarning, this.state.celcius = false;
-
+		
+		this.pages = ["home", "forecast", "warning"];
+		//set the state of the page to the home page 
 		this.state.page = this.pages[0];
 	}
 
@@ -49,7 +50,7 @@ export default class Iphone extends Component {
 		$.ajax({
 			url: url,
 			dataType: "jsonp",
-			success : this.parseResponse, 
+			success : this.parseResponse,  
 			error : function(req, err){ console.log('API call failed ' + err); }
 		});
 
@@ -116,10 +117,21 @@ export default class Iphone extends Component {
 			return "../assets/icons/weather-cloud.png";
 		}
 	}
+
+	//function which creates a dynamic background depending on the current temperature
+	findBackground = () => {
+		let temp = this.state.ctemp;
+		if(temp >= 15 ){
+			//sunny background
+			return style.container;
+		} else if ((temp < 15 && temp >= 0) || temp < 0) {
+			//clear background
+			return style.containerClear;
+		}
+	}
 	
 	componentDidMount() {
 		this.fetchWeatherData();
-		//setInterval(this.fetchWeatherData, 240000)
 	}
 
 	// the main render method for the iphone component
@@ -128,10 +140,9 @@ export default class Iphone extends Component {
 		const tempStyles = this.state.ctemp ? `${style.temperature} ${style.filled}` : style.temperature;
 
 		return (
-			<div className={ style.container }>
-				{/* change background depending on temperature */}
-
-				<div className={ style.header }>
+			 // add the background depending on the temperature
+			<div className={ this.findBackground() }>
+ 				<div className={ style.header }>
 					{/* add image to the background depending on what page it is on. */}
 					{ this.state.page === "home" && <img className={ style.mountain } src="../assets/backgrounds/mountain.png" alt="mountain" /> }
 				   	{ this.state.page === "warning" && <img className={ style.hazard } src="../assets/icons/warning-forecast.png" alt="hazard" /> }
@@ -264,17 +275,15 @@ export default class Iphone extends Component {
 					{/* Give a warning if there is hevay snow */ this.state.description === "heavy snow" && <div className= { style.warningTitle }> HEAVY SNOW </div> }
 					{ this.state.description === "heavy snow" && <div className= { style.warningDescription }> POTENTIAL SLIPPING </div> }
 
-					{this.state.currenttemp > 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false  && <div className= { style.warningTitle }> NO WARNING AT THIS CURRENT TIME </div> }
-				
-					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking */  this.state.currenttemp[0] <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
-					{this.state.currenttemp[0] <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
+					{/*check if the current temperature is less than 0 as this may be too cold to go out hiking (ensure there isnt any other warning) */  this.state.ctemp <= 0 && ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE </div> }
+					{this.state.ctemp <= 0 &&  ["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
 
 				</div> }
 
 				<div className={ style.footer }>
 					<div className={ style_leftarrow.container }>
 						{/* this creates a left arrow button which can be used to go back a page */ }
-						<Button  className={ style_leftarrow.button } clickFunction={ this.changePageBackward }/>
+						<LeftArrow  className={ style_leftarrow.button } clickFunction={ this.changePageBackward }/>
 					</div>
 					<div className={ style_button.container }>
 						{/* redirects the user to a specific page by clicking the button */ }
@@ -286,7 +295,7 @@ export default class Iphone extends Component {
 					</div>
 					<div className={ style_rightarrow.container }>
 						{/* this creates a right arrow button which can be used to go forward a page */ }
-						<Button  className={ style_rightarrow.button } clickFunction={ this.changePageForward }/>
+						<RightArrow  className={ style_rightarrow.button } clickFunction={ this.changePageForward }/>
 					</div>
 
 				</div>
@@ -380,10 +389,10 @@ export default class Iphone extends Component {
 		} 
 
 		//get the date whos weather cannot be retrieved due to API restrictions
-		
 		let last = new Date(filteredDates[4]);
 		let lastDate = last.setDate(last.getDate() + 1);
 		let days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+		
 		//set states for days
 		this.setState({
 			current: days[new Date().getDay()],
@@ -396,9 +405,8 @@ export default class Iphone extends Component {
 		});
 
 		this.setState({description: parsed_json.list.map(temp => temp['weather'][0]['description'])});
-
 		//check if weather condition is a dangerous warning -> throw hazard 
-		if (["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0])){
+		if (["heavy intensity rain", "moderate rain", "heavy snow"].includes(this.state.description[0]) || this.state.ctemp <= 0){
 			this.setState({ currentWarning: true }); 
 		} else {
 			this.setState({ currentWarning: false });
