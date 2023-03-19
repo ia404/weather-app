@@ -44,7 +44,7 @@ npm start
 - The CSS pre-processor in use is Less.
 - In the first page, the weather page information for the day will be shown.
 - In the second page, the forecast for the week would be shown alongside any warnings.
-- In the third page, if there is a warning, warning information will be shown.
-- Arrow buttons can be used to navigate to the forecast page or warning page (if there is a warning)
+- In the third page, warning information will be shown.
+- Arrow buttons can be used to navigate to the forecast page or warning page
 - Circular butons can be used to move directly to a chosen page by clicking on the button that corresponds to be page
 - e.g middle button would direct you to the forecast page.
