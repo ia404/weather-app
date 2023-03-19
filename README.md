@@ -48,4 +48,3 @@ npm start
 - Arrow buttons can be used to navigate to the forecast page or warning page (if there is a warning)
 - Circular butons can be used to move directly to a chosen page by clicking on the button that corresponds to be page
 - e.g middle button would direct you to the forecast page.
-```
