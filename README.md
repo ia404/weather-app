@@ -1,5 +1,9 @@
 # Weather App For Hikers
 ## Set-Up Guide
+- [Installation](#installation)
+- [Development Workflow](#development-workflow)
+- [Quick App Overview](#quick-app-overview)
+
 **0. Before doing any of this, if you're using your own laptop/desktop, make sure you've got the latest versions of node and npm installed (npm v: 4.0.5 & node v: 7.4.0) :**
 ```sh
 node -v
@@ -7,26 +11,30 @@ npm -v
 ```
 
 ## Installation
-**1. Install the dependencies which are required for the weather app to be launched :**
+**1. Make the project your own :**
+```sh
+npm init
+```
 
+**2. Install the dependencies which are required for the weather app to be launched :**
 ```sh
 npm install
 ```
 
 ## Development Workflow
-**2. Start a live-reload development server :**
+**3. Start a live-reload development server :**
 
 ```sh
 npm run dev
 ```
 
-**3. Generate a production build in `./build` :**
+**4. Generate a production build in `./build` :**
 
 ```sh
 npm run build
 ```
 
-**4. Start local production server with [serve](https://github.com/zeit/serve):**
+**5. Start local production server with [serve](https://github.com/zeit/serve):**
 ```sh
 npm start
 ```
