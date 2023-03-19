@@ -25,9 +25,8 @@ export default class Iphone extends Component {
 	constructor(props){
 		super(props);
 		//current temperature state
-		this.state.ctemp = null;
 		//storing states of all times, temperatures and conditions
-		this.state.times, this.state.temps, this.state.conditions = null;
+		this.state.ctemp, this.state.times, this.state.temps, this.state.conditions = null;
 
 		//storing the actual dates of the present day and the future week.
 		this.dates = [];
@@ -37,26 +36,27 @@ export default class Iphone extends Component {
 
 		//description of weather
 		this.state.temp, this.state.windSpeed, this.state.humidity, this.state.visibility, this.state.description = null;
-		this.state.currentWarning = false;
+		this.state.currentWarning = true;
 		
-		this.pages = ["home", "forecast", "warning"];
-		//set the state of the page to the home page 
-		this.state.page = this.pages[0];
+		this.pages = ["home", "forecast", "warning"]; //0, 1, 2 page indexes
+	 
+		this.state.page = this.pages[0]; //Starting at home page
+		//Possible warnings
 		this.warnings = ["heavy intensity rain", "moderate rain", "heavy snow", "thunderstorm", "tornado", "squall", "volcanic ash"];
 		this.warningsDescription = {
 			"heavy intensity rain": ["HEAVY INTENSITY RAIN", "POTENTIAL FLOODING AND LOW VISIBILITY"],
 			"moderate rain": ["MODERATE RAIN", "POTENTIAL FLOODING AND LOW VISIBILITY"],
 			"thunderstorm": ["THUNDERSTORM", "POTENTIAL LIGHTNING - TAKE SHELTER"],
 			"heavy snow": ["HEAVY SNOW", "POTENTIAL SLIPPING"],
-			"tornado": ["TORNADO", "POTENTIAL DAMAGE TO PROPERTY"],
+			"tornado": ["TORNADO", "POTENTIAL DAMAGE TO TENTS"],
 			"squall": ["SQUALL", "POTENTIAL INJURIES"],
 			"volcanic ash": ["VOLCANIC ASH", "INHALING CAN CAUSE BREATHING PROBLEMS"]
 		};			
 
 	}
 
-	//create pages for the iphone
-	// fetch weather data from openweathermap.org
+	//create pages for the iphone, given function
+	//fetch weather data from openweathermap.org
 	fetchWeatherData = () => {
 		// API call to openweathermap.org
 		const url = "https://api.openweathermap.org/data/2.5/forecast?lat=54.46087&lon=-3.088625&cnt=66&units=metric&appid=76e5bd7bbfc1b3d0f82d533b3b231151";
@@ -142,7 +142,7 @@ export default class Iphone extends Component {
 			return  this.temps.push([temperature, false]);
 		} 
 	}	
-	componentDidMount() {
+	componentDidMount() { //Used for rendering API data
 		this.fetchWeatherData();
 	}
 
@@ -201,10 +201,14 @@ export default class Iphone extends Component {
 
 				{/*If the user is on the warning page, they are able to see the exact warning */  this.state.page === "warning" && <div class={ style.warning }>
 					<div> Ensure to dress up correctly for: </div>
-					{/* Give a warning if there is heavy intesnity rain */  }
+					{/* Give a warning if conditions are dangerous */  }
 					{ this.warnings.includes(this.state.description[0]) === true && <div className= { style.warningTitle }> { this.warningsDescription[this.state.description[0]][0]}</div> }
 					{ this.warnings.includes(this.state.description[0]) === true &&<div className= { style.warningDescription }> { this.warningsDescription[this.state.description[0]][1]}</div> }
 
+					{/* Checking if there are no weather warnings*/}
+					{this.state.ctemp > 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningTitle }> NO WARNINGS AVAILABLE </div> }
+
+					{/* Checking if theres low temperature when there are no other conditions e.g. frostbite*/}
 					{this.state.ctemp <= 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningTitle }> LOW TEMPERATURE  </div> }
 					{this.state.ctemp <= 0 &&  this.warnings.includes(this.state.description[0]) === false && <div className= { style.warningDescription }> RISK OF FROSTBITE </div> }
 				</div> }
@@ -303,11 +307,5 @@ export default class Iphone extends Component {
 		//date in which weather cannot be received
 		this.dates.push(this.changeDateToDay(lastDate));
 
-		//check if weather condition is a dangerous warning -> throw hazard 
-		if (this.warnings.includes(this.state.description[0]) || this.state.ctemp <= 0){
-			this.setState({ currentWarning: true }); 
-		} else {
-			this.setState({ currentWarning: false });
-		}
 	}
 }
