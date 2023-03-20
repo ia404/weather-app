@@ -36,7 +36,6 @@ export default class Iphone extends Component {
 
 		//description of weather
 		this.state.temp, this.state.windSpeed, this.state.humidity, this.state.visibility, this.state.description = null;
-		this.state.currentWarning = true;
 		
 		this.pages = ["home", "forecast", "warning"]; //0, 1, 2 page indexes
 	 
@@ -74,15 +73,8 @@ export default class Iphone extends Component {
 	changePageForward = () => {
 		let i = this.pages.indexOf(this.state.page); //checks current index of the page array
 		//as long as the index is not on the last page, it can be changed.
-		if (i !== this.pages.length-1) {
-			//the two conditions to check if the user can move forward:
-			//if there is a warning, the user will be able to change the page forward (if on first or second page
-			//if there is no warning, the user will be able to change the page forward only to the second page
-			if((this.state.currentWarning === true && (i === 0 || i == 1)) || (this.state.currentWarning === false && i === 0)){ //if there is no warning, there would be no warning page
-				this.setState({ page: this.pages[i+1] }); 
-			} else {
-				this.setState({ page: this.pages[i] }); //if there is no warning, the user will be not able to change the page forward
-			}
+		if (i !== this.pages.length-1) { 
+			this.setState({ page: this.pages[i+1] });
 		}
 	}
 
@@ -144,7 +136,7 @@ export default class Iphone extends Component {
 	}
 
 	//add the temperature and warning to the array
-	pushTempToArr 	= (temperature, description) => {
+	pushTempToArr = (temperature, description) => {
 		if (temperature <= 0 || this.warnings.includes(description)) {
 			return  this.temps.push([temperature, true]);
 		} else {
@@ -232,7 +224,7 @@ export default class Iphone extends Component {
 						<Button  clickFunction={() => this.changePage(0)}/> 
 						<Button  clickFunction={() => this.changePage(1)}/> 
 						{/* if there is a warning, then there'll be a third button allowing the user to see the warning without having to use the arrow keys */ }
-						{ this.state.currentWarning === true && <Button clickFunction={() => this.changePage(2)}/> }
+						<Button clickFunction={() => this.changePage(2)}/> 
 					</div>
 					<div className={ style_rightarrow.container }>
 						{/* this creates a right arrow button which can be used to go forward a page */ }
