@@ -34,6 +34,8 @@ export default class HourlyForecast extends Component {
 				<p  className={style.detailsText}> { this.props.day } </p>
 				<img className={style.weatherIcon} src={ this.findWeatherIcon() } /> 
 				<p className={style.detailsText}> { this.props.temperature }° </p>
+				{/* Add a warning sign if there is a warning */}
+				{ this.props.warning === true && <img className={ style.warningF } src="../assets/icons/warning-forecast.png" alt="warning" /> }
 			</div>			
 		);
 	}

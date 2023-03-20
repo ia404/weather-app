@@ -134,6 +134,15 @@ export default class Iphone extends Component {
 		return this.state.times[i];
 	}
 
+	//function to get warning
+	getWarning = (i) => {
+		if (this.getTemperature(i) <= 0 || this.warnings.includes(this.getCondition(i))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	//add the temperature and warning to the array
 	pushTempToArr 	= (temperature, description) => {
 		if (temperature <= 0 || this.warnings.includes(description)) {
@@ -192,10 +201,10 @@ export default class Iphone extends Component {
 
 					<div className={style.detailsContainer}>
 						{/* create climate objects for the home page */}
-						{ this.state.times && <HourlyForecast day={this.getDay(0)} condition={this.getCondition(0)} temperature ={this.getTemperature(0)}/> } 
-						{ this.state.times && <HourlyForecast day={this.getDay(1)} condition={this.getCondition(1)} temperature ={this.getTemperature(1)}/> } 
-						{ this.state.times && <HourlyForecast day={this.getDay(2)} condition={this.getCondition(2)} temperature ={this.getTemperature(2)}/> } 
-						{ this.state.times && <HourlyForecast day={this.getDay(3)} condition={this.getCondition(3)} temperature ={this.getTemperature(3)}/> }
+						{ this.state.times && <HourlyForecast day={this.getDay(0)} condition={this.getCondition(0)} temperature ={this.getTemperature(0)} warning={this.getWarning(0)}/> } 
+						{ this.state.times && <HourlyForecast day={this.getDay(1)} condition={this.getCondition(1)} temperature ={this.getTemperature(1)} warning={this.getWarning(1)}/> } 
+						{ this.state.times && <HourlyForecast day={this.getDay(2)} condition={this.getCondition(2)} temperature ={this.getTemperature(2)} warning={this.getWarning(2)}/> } 
+						{ this.state.times && <HourlyForecast day={this.getDay(3)} condition={this.getCondition(3)} temperature ={this.getTemperature(3)} warning={this.getWarning(3)}/> }
 					</div>
 				</div> }
 
