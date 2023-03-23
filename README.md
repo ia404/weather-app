@@ -13,7 +13,7 @@ npm -v
 ## Installation
 **1. Go to the directory and make the project your own :**
 ```sh
-cd <directory of weather directory>
+cd <directory of weather app>
 npm init
 ```
 
