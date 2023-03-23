@@ -1,4 +1,6 @@
 # Weather App For Hikers
+**The following Boilerplate code by Juan-Alvarado was used to design this weather app:**
+**https://github.com/Juan-Alvarado/weatherapp-boilerplate.**
 ## Set-Up Guide
 - [Installation](#installation)
 - [Development Workflow](#development-workflow)
