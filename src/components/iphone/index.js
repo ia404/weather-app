@@ -58,7 +58,7 @@ export default class Iphone extends Component {
 	//fetch weather data from openweathermap.org
 	fetchWeatherData = () => {
 		// API call to openweathermap.org
-		const url = "https://api.openweathermap.org/data/2.5/forecast?lat=54.46087&lon=-3.088625&cnt=66&units=metric&appid=76e5bd7bbfc1b3d0f82d533b3b231151";
+		const url = "https://api.openweathermap.org/data/2.5/forecast?lat=54.46087&lon=-3.088625&cnt=66&units=metric&appid=INSERTTOKEN";
 		// retrieve the data from the API call and parse it to JSON
 		$.ajax({
 			url: url,
